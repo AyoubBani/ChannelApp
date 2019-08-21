@@ -14,6 +14,8 @@ exports.getChannels = (req, res, next) => {
 
 exports.getMessages = (req, res, next) => {
     const channels = Channel.fetchAll();
+    /*
+    before
     channels.map((channel) => {
         if (channel.channel === parseInt(req.params.channel)) {
             res.status(200).json({
@@ -22,10 +24,18 @@ exports.getMessages = (req, res, next) => {
             });
         }
     })
+    */
+    const foundChannel = channels.find(ch => ch.channel === parseInt(req.params.channel))
+    res.status(200).json({
+        message: (foundChannel !== undefined) ? 'Fetched messages successfully.' : 'Channel ' + req.params.channel + ' is not found',
+        channelMessages: (foundChannel !== undefined) ? foundChannel.messages : []
+    });
 }
 
 exports.addMessage = (req, res, next) => {
     // GET channel by id    
+
+    /* before
     const channels = Channel.fetchAll();
     channels.map((channel) => {
 
@@ -37,4 +47,18 @@ exports.addMessage = (req, res, next) => {
             });
         }
     })
-};
+    */
+    const channels = Channel.fetchAll();
+    const foundIndex = channels.findIndex(ch => ch.channel === parseInt(req.params.channel));
+    if (foundIndex === -1) {
+        res.status(201).json({
+            message: 'Channel ' + req.params.channel + ' is not found',
+        });
+    } else {
+        channels[foundIndex].messages.push(req.body.message)
+        res.status(201).json({
+            message: 'Message added successfully to channel!',
+            channelMessage: req.body.message
+        });
+    };
+}
