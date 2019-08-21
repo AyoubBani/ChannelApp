@@ -18,8 +18,9 @@ class NavigationPanel extends Component {
     handleClick = (e) => {
         e.preventDefault();
         this.props.setChannel(e.target.id);
+        this.props.clearInput();
         // fetch Messages
-        this.props.fetchMessages(e.target.id);
+        this.props.fetchMessages(e.target.id);        
 
     };
 
@@ -58,6 +59,3 @@ const mapDispatchToProps = dispatch => {
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(NavigationPanel);
-
-
-

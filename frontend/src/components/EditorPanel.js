@@ -7,6 +7,10 @@ import { fetchMessages } from "../actions/messages";
 
 class EditorPanel extends Component {
 
+    componentDidMount() {
+        this.props.setClick(this.clearInput);
+    }
+
     state = {
         message: ""
     }
@@ -15,11 +19,14 @@ class EditorPanel extends Component {
         this.setState({ message: event.target.value });
     }
 
+
+    clearInput = () => this.setState({ message: "" })
+
+
     onSubmit = e => {
-        e.preventDefault();        
+        e.preventDefault();
         this.props.addMessage(this.props.channel, this.state.message);
-        this.setState({ message: "" })
-        this.props.fetchMessages(this.props.channel);
+        this.clearInput();
     }
 
 
@@ -31,7 +38,7 @@ class EditorPanel extends Component {
                     <label htmlFor="exampleFormControlTextarea1">Message</label>
                     <textarea className="form-control" id="exampleFormControlTextarea1" rows="3" value={this.state.message} onChange={this.handleChange} ></textarea>
                 </div>
-                <button type="submit" className="btn btn-primary mb-2" disabled={(this.props.channel === null || this.state.message ==="")}>Submit</button>
+                <button type="submit" className="btn btn-primary mb-2" disabled={(this.props.channel === null || this.state.message === "")}>Submit</button>
 
             </form>
         )
@@ -39,10 +46,13 @@ class EditorPanel extends Component {
 }
 
 
+
+
 const mapStateToProps = state => {
+    console.log("EDITOR STATE", state);
     return {
         channels: state.channels.channels,
-        messages: state.messages.messages
+        messages: state.messages.messagesN
     }
 }
 
@@ -56,4 +66,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorPanel);
+export default connect(mapStateToProps, mapDispatchToProps)(EditorPanel); 

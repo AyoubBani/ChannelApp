@@ -20,21 +20,25 @@ class Layout extends Component {
         this.setState({ selectedChannel: channel })
     }
 
+    clearInput = () => {
+        this.clickChild();
+    }
+
 
     render() {
         return (
             <div className="container">
                 <div className="row">
                     <div className="col">
-                        <NavigationPanel selectedChannel={this.state.selectedChannel} setChannel={this.setChannel} />
+                        <NavigationPanel clearInput={this.clearInput} selectedChannel={this.state.selectedChannel} setChannel={this.setChannel} />
                     </div>
                     <div className="col">
-                        <MessagesPanel />
+                        <MessagesPanel channel={this.state.selectedChannel}/>
                     </div>
                 </div>
                 <div className="row">
                     <div className="col">
-                        <EditorPanel channel={this.state.selectedChannel}/>
+                        <EditorPanel setClick={click => this.clickChild = click} channel={this.state.selectedChannel} />
                     </div>
 
                 </div>
@@ -47,4 +51,5 @@ class Layout extends Component {
 
 
 
-export default connect(null, null)(Layout);
+
+    export default connect(null, null)(Layout);
